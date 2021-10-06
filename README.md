@@ -2,4 +2,4 @@
 Kursa projekts - ToDoList
 
 
-Artis iesaka PosGress datubaze
+Artis iesaka PostgreSQL datubaze
