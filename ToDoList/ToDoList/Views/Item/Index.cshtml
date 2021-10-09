@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ToDoList.Models.Item>
+
+
+<div class="container" p-3>
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Learning C# and making ToDoList</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a class="btn btn-primary" asp-controller="Item" asp-action="Create">Create new Item</a>
+        </div>
+    </div>
+    <br />
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Task Name
+                    </th>
+                    <th>
+                        Task Description
+                    </th>
+                    <th>
+                        Responsible User
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td width="20%">@item.ItemName</td>
+                        <td width="50%">@item.ItemDescription</td>
+                        <td width="20%">@item.ResponsibleUser</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    }
+    else
+    {
+        <p>No items created yet</p>
+    }
