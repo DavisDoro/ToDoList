@@ -17,5 +17,8 @@ namespace ToDoList.Models
         public string ItemDescription { get; set; }
         [DisplayName("Resposible User")]
         public string ResponsibleUser { get; set; }
+
+        public DateTime DeadlineDate { get; set; }
+
     }
 }

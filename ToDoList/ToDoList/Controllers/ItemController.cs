@@ -18,7 +18,11 @@ namespace ToDoList.Controllers
         public IActionResult Index()
         {
             IEnumerable<Item> objList = _db.Items;
-            return View(objList);
+            var sortedObjList = from obj in objList
+                                orderby obj.DeadlineDate
+                                select obj;
+            return View(sortedObjList);
+
         }
 
         //GET-create
@@ -36,5 +40,36 @@ namespace ToDoList.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+        // GET Delete
+        public IActionResult Delete(int? id)
+        {
+
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var obj = _db.Items.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            return View(obj);
+        }
+        //POST Delete
+        public IActionResult DeletePOST(int? id)
+        {
+            var obj = _db.Items.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _db.Items.Remove(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

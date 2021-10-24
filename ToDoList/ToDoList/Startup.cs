@@ -28,10 +28,10 @@ namespace ToDoList
             if (string.IsNullOrEmpty(Configuration.GetConnectionString("DefaultConnection"))==true)
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-                                     options.UseInMemoryDatabase("ta")
+                                    options.UseInMemoryDatabase("ta")
                                                              );
-            }
-            else
+           }
+           else
             {
                 services.AddDbContext<ApplicationDbContext>(options => 
                                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) 

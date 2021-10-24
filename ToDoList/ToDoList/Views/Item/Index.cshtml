@@ -25,17 +25,32 @@
                     <th>
                         Responsible User
                     </th>
+                    <th>
+                        DeadlineDate
+                    </th>
+                    <th>
+                        Status
+                    </th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td width="20%">@item.ItemName</td>
-                        <td width="50%">@item.ItemDescription</td>
-                        <td width="20%">@item.ResponsibleUser</td>
-                    </tr>
+                <tr>
+                    <td width="15%">@item.ItemName</td>
+                    <td width="30%">@item.ItemDescription</td>
+                    <td width="15%">@item.ResponsibleUser</td>
+                    <td width="15%">@item.DeadlineDate</td>
+                    <td width="15%">
+                        <div class="w-100 btn-group ">
+
+                            <a asp-controller="Item" asp-action="DeletePost" asp-route-Id="@item.Id" class="btn btn-primary ">Done</a>
+                        </div>
+                    </td>
+
+
+                </tr>
                 }
             </tbody>
         </table>
