@@ -5,9 +5,9 @@ Kursa projekts - ToDoList
 Artis iesaka PostgreSQL datubaze
 
 Datu bāzes pārvaldības sistēma : Mysql
+entity core Framework
 
-
-// @TODO list
+//======================= @TODO  =======================
 Pamat funkcijas:
 1) Pievienot ierakstu
 2) Dzest ierakstu ( ar comentari )
