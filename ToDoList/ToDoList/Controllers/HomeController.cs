@@ -25,9 +25,10 @@ namespace ToDoList.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            ViewData["Message"] = "Use this page to detail your site's privacy policy.";
+            return View("Privacy");
         }
-
+      
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

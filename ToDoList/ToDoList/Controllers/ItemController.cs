@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace ToDoList.Controllers
 {
-    public class ItemController : Controller
+    public class ItemController: Controller
     {
         private readonly ApplicationDbContext _db;
         public ItemController(ApplicationDbContext db)
@@ -17,11 +18,12 @@ namespace ToDoList.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Item> objList = _db.Items;
-            var sortedObjList = from obj in objList
-                                orderby obj.DeadlineDate
-                                select obj;
-            return View(sortedObjList);
+            
+            
+            Itemrepository ItemrepositoryNew = new Itemrepository(_db);
+            ;
+            
+            return View(ItemrepositoryNew.GetItems());
 
         }
 

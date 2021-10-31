@@ -28,6 +28,9 @@
                     <th>
                         DeadlineDate
                     </th>
+                     <th>
+                       Priority
+                    </th>
                     <th>
                         Status
                     </th>
@@ -38,11 +41,14 @@
                 @foreach (var item in Model)
                 {
                 <tr>
-                    <td width="15%">@item.ItemName</td>
+                    <td width="10%">@item.ItemName</td>
                     <td width="30%">@item.ItemDescription</td>
                     <td width="15%">@item.ResponsibleUser</td>
-                    <td width="15%">@item.DeadlineDate</td>
-                    <td width="15%">
+                    <td width="10%">@item.DeadlineDate</td>
+
+                    <td width="10%">@item.Priority</td>
+
+                    <td width="10%">
                         <div class="w-100 btn-group ">
 
                             <a asp-controller="Item" asp-action="DeletePost" asp-route-Id="@item.Id" class="btn btn-primary ">Done</a>
