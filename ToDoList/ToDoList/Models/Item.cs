@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace ToDoList.Models
 {
+    public enum Priority
+    {
+        Low=1,
+        Normal=2,
+        High=3
+    }
     public class Item
     {
         [Key]
@@ -19,6 +25,7 @@ namespace ToDoList.Models
         public string ResponsibleUser { get; set; }
 
         public DateTime DeadlineDate { get; set; }
+        public Priority Priority { get; set; }
 
     }
 }

@@ -35,6 +35,9 @@ namespace ToDoList.Migrations
                     b.Property<string>("ItemName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
                     b.Property<string>("ResponsibleUser")
                         .HasColumnType("nvarchar(max)");
 
