@@ -1,4 +1,6 @@
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +10,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ToDoList.Data;
+
 
 namespace ToDoList
 {
@@ -25,20 +29,28 @@ namespace ToDoList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (string.IsNullOrEmpty(Configuration.GetConnectionString("DefaultConnection"))==true)
-            {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                                    options.UseInMemoryDatabase("ta")
-                                                             );
-           }
-           else
-            {
+           // if (string.IsNullOrEmpty(Configuration.GetConnectionString("DefaultConnection"))==true)
+           // {
+           //     services.AddDbContext<ApplicationDbContext>(options =>
+           //                         options.UseInMemoryDatabase("ta")
+           //                                                  );
+           //}
+           //else
+           // {
                 services.AddDbContext<ApplicationDbContext>(options => 
                                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) 
                                                             );
-            }
+            //}
 
+            var builder = WebAssemblyHostBuilder.CreateDefault();
             services.AddControllersWithViews();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddServerSideBlazor();
+            services.AddRazorPages();
+            services.AddScoped<IToastService, ToastService>();
+            services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +75,8 @@ namespace ToDoList
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapBlazorHub();
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
