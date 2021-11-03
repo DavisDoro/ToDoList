@@ -1,3 +1,4 @@
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,8 +9,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ToDoList.Data;
+
 
 namespace ToDoList
 {
@@ -25,13 +28,13 @@ namespace ToDoList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (string.IsNullOrEmpty(Configuration.GetConnectionString("DefaultConnection"))==true)
+            if (string.IsNullOrEmpty(Configuration.GetConnectionString("DefaultConnection")) == true)
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                                     options.UseInMemoryDatabase("ta")
                                                              );
-           }
-           else
+            }
+            else
             {
                 services.AddDbContext<ApplicationDbContext>(options => 
                                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) 
@@ -39,6 +42,12 @@ namespace ToDoList
             }
 
             services.AddControllersWithViews();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            //services.AddScoped<IAuthService, AuthService>();
+            services.AddServerSideBlazor();
+            services.AddRazorPages();
+            services.AddScoped<IToastService, ToastService>();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +72,8 @@ namespace ToDoList
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapBlazorHub();
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
