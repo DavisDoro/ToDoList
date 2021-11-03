@@ -20,3 +20,4 @@ Pamat funkcijas:
 6) History table
 7) Login functionality
 8) Implement parent class for homework (Lesson 10)
+9) Unit testi datubāzei ?
