@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @inject ILocalStorageService LocalStorage
 @*@inject AuthenticationStateProvider AuthenticationStateProvider*@
-@inject IAuthService AuthService
 @inject IToastService ToastService
 
 
@@ -24,19 +23,9 @@ Please log in below or <a href="register">Register</a> for new account.
 @code {
     private UserLogin user = new UserLogin();
 
-    private async void HandleLogin()
+    private  void HandleLogin()
     {
-        var result = await AuthService.Login(user);
-        if (result.Success)
-        {
-            await LocalStorage.SetItemAsync<string>("authToken", result.Data);
-            //await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        }
-        else
-        {
-            ToastService.ShowError(result.Message);
-        }
-
+        
     }
 }
 
