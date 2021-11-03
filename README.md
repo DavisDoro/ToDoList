@@ -13,8 +13,8 @@ developed API registration and varification, but no client side forms yet.
 Pamat funkcijas:
 
 1) Pievienot ierakstu [done]
-2) Dzest ierakstu ( ar comentari ) 
-3) Regiget ierakstu
+2) Dzest ierakstu [done]
+3) Regiget ierakstu -// Janis pie šī strādā
 4) Definet atbildigo [sort of]
 5) Definet piority [done]
 6) History table
