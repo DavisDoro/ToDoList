@@ -9,15 +9,6 @@ developed API registration and varification, but no client side forms yet.
 
 
 
-
-
-
-Kursa projekts - ToDoList
-Artis iesaka PostgreSQL datubaze
-
-Datu bāzes pārvaldības sistēma : Mysql
-entity core Framework
-
 //======================= @TODO  =======================
 Pamat funkcijas:
 
