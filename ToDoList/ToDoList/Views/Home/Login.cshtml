@@ -1,0 +1,20 @@
+﻿@{
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var error = TempData["Error"] as string;
+    var success = TempData["Success"] as string;
+}
+@if (!string.IsNullOrEmpty(error))
+{
+    <h2 class="alert-danger" style="padding:20px;">@error</h2>
+}
+else if(!string.IsNullOrEmpty(success))
+{
+    <h2 class="alert alert-success" style="padding:20px;">@success</h2>
+}
+<h3>Welcome Back</h3>
+<form action="/login?ReturnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
+<input type="text" class="form-control w-50" name="username" placeholder="Username" /><br />
+<input type="password" class="form-control w-50" name="password" placeholder="Password" /><br />
+<input type="submit" class="btn btn-success w-15" value="Login" />
+</form>
+<p>Don't have an account yet? <a href="/register">Sign Up</a> now.</p>

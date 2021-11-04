@@ -1,16 +1,10 @@
-using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using ToDoList.Data;
 
 
@@ -32,21 +26,23 @@ namespace ToDoList
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                                     options.UseInMemoryDatabase("ta")
-                                                             );
+                                    );
             }
             else
             {
                 services.AddDbContext<ApplicationDbContext>(options => 
-                                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) 
-                                                            );
+                                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                                    );
             }
 
             services.AddControllersWithViews();
             services.AddScoped<IAuthRepository, AuthRepository>();
-            //services.AddScoped<IAuthService, AuthService>();
             services.AddServerSideBlazor();
             services.AddRazorPages();
-            services.AddScoped<IToastService, ToastService>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>{
+                    options.LoginPath = "/login";
+                });
            
         }
 
@@ -67,7 +63,7 @@ namespace ToDoList
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

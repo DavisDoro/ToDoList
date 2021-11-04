@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoList.Controllers
 {
@@ -16,6 +17,7 @@ namespace ToDoList.Controllers
         {
             _db = db;
         }
+        [Authorize]
         public IActionResult Index()
         {
             
@@ -28,6 +30,7 @@ namespace ToDoList.Controllers
         }
 
         //GET-create
+        [Authorize]
         public IActionResult Create()
         {
             return View();

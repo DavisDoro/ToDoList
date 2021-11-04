@@ -1,0 +1,51 @@
+﻿@model ToDoList.Models.UserRegister
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    UserRegister user = new UserRegister();
+    var error = TempData["Error"] as string;
+    var success = TempData["Success"] as string;
+}
+@if (!string.IsNullOrEmpty(error))
+{
+    <h3 class="alert-danger" style="padding:20px;">@error</h3>
+}
+else if (!string.IsNullOrEmpty(success))
+{
+    <h3 class="alert alert-success" style="padding:20px;">@success</h3>
+}
+<H3>Join Group TASKer team!</H3><br />
+
+<form method="post" asp-action="SendData">
+
+            <div class="col, w-50">
+                <input asp-for="Email" class="form-control" placeholder="Email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+            </div>
+            <br />
+            <div class="col, w-50">
+
+                <input asp-for=" Username" class="form-control" placeholder="Username"/>
+                <span asp-validation-for="Username" class="text-danger"></span>
+
+            </div><br />
+
+            <div class="col, w-50">
+                <input asp-for="Password" class="form-control" placeholder="Password" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+
+            </div>
+            <br />
+            <div class="col, w-50">
+                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <br />
+
+
+            <div class="col, w-25">
+                <input type="submit" class="btn btn-success w-75 pull-left" value="Register" />
+            </div>
+</form>

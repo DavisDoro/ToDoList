@@ -5,8 +5,8 @@ namespace ToDoList.Data
 {
     public interface IAuthRepository
     {
-        Task<ServiceResponse<int>> Register(User user, string password);
-        Task<ServiceResponse<string>> Login(string email, string password);
         Task<bool> UserExists(string email);
+        bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
+        void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
     }
 }

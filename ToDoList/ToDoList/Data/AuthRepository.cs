@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,56 +16,16 @@ using ToDoList.Models;
 
 namespace ToDoList.Data
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthRepository : Controller, IAuthRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
 
-        public AuthRepository(ApplicationDbContext context, IConfiguration configuration)
+        public AuthRepository(ApplicationDbContext context)
         {
             _context = context;
-            _configuration = configuration;
+
         }
         public ApplicationDbContext Context { get; }
-
-        public async Task<ServiceResponse<string>> Login(string email, string password)
-        {
-            var response = new ServiceResponse<string>();
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower().Equals(email.ToLower()));
-            if (user == null)
-            {
-                response.Success = false;
-                response.Message = "User not found.";
-            }
-            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-            {
-                response.Success = false;
-                response.Message = "Wrong password.";
-            }
-            else
-            {
-                response.Data = CreateToken(user);
-            }
-            return response;
-        }
-
-        public async Task<ServiceResponse<int>> Register(User user, string password)
-        {
-            if (await UserExists(user.Email))
-            {
-                return new ServiceResponse<int> { Success = false, Message = "User with this email already exists." };
-            }
-
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return new ServiceResponse<int> { Data = user.Id, Message = "Registration complete." };
-        }
 
         public async Task<bool> UserExists(string email)
         {
@@ -71,7 +36,7 @@ namespace ToDoList.Data
             return false;
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {
@@ -80,7 +45,7 @@ namespace ToDoList.Data
             }
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
@@ -94,29 +59,6 @@ namespace ToDoList.Data
                 }
             }
             return true;
-        }
-
-        private string CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
-            };
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
         }
     }
 }
