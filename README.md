@@ -1,30 +1,23 @@
-﻿# ToDoList
-Kursa projekts - ToDoList
+# ToDoList
+//---------- 03.11.2021 ---------//
+
+developed API registration and varification, but no client side forms yet.
+- api/auth/register takes parameters "username", "email", "password", "confirmPassword"
+- api/auth/register paramters "email" and "password". Return JWT
+
+- Added enum for Task priority
 
 
-Artis iesaka PostgreSQL datubaze
-
-Datu bāzes pārvaldības sistēma : Mysql
-entity core Framework
 
 //======================= @TODO  =======================
 Pamat funkcijas:
-1) Pievienot ierakstu
-2) Dzest ierakstu ( ar comentari )
-3) Regiget ierakstu
-4) Definet atbildigo 
-4) Definet piority
 
-
-array table_status (new,processed, compleated ) ??? (iespejams use defined array)
-array table_Priority (asap,hight,normal,Low)
-
-Datubaze: 
-
-1) tabula ar ierakstiem (id, atbildigais_id, ToDo_text, Priority, Status_id, pievienosanas_datums,is_deleted )
-2) table_deleted (ieraksta_id, delete reason,date_time,atbildigas_id)
-3) table_users(id,atbildigais_FullName, e_mail, phone)
-4) _log (id,ieraksta_id,atbildigais_id,changes_text,datetime )
-
-
-
+1) Pievienot ierakstu [done]
+2) Dzest ierakstu [done]
+3) Regiget ierakstu -// Janis pie šī strādā
+4) Definet atbildigo [sort of]
+5) Definet piority [done]
+6) History table
+7) Login functionality
+8) Implement parent class for homework (Lesson 10)
+9) Unit testi datubāzei ?
