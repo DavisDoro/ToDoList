@@ -30,7 +30,7 @@ namespace ToDoList
             }
             else
             {
-                services.AddDbContext<ApplicationDbContext>(options => 
+                services.AddDbContext<ApplicationDbContext>(options =>
                                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                                     );
             }
@@ -40,10 +40,11 @@ namespace ToDoList
             services.AddServerSideBlazor();
             services.AddRazorPages();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>{
+                .AddCookie(options =>
+                {
                     options.LoginPath = "/login";
                 });
-           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

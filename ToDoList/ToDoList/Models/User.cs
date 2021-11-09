@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ToDoList.Models
 {
-    public class User :DateBase
+    public class User : DateBase
     {
         [Key]
         public int Id { get; set; }

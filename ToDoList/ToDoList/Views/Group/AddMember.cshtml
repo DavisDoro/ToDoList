@@ -32,14 +32,7 @@
                 <div class="col">
                     <a class="btn btn-danger w-100 mx-1" asp-action="Index">Back</a>
                 </div>
-               @* <input data-val="true"
-                       data-val-number="The field StudentId must be a number."
-                       data-val-required="The StudentId field is required."
-                       id="GroupId"
-                       name="GroupId"
-                       type="hidden"
-                       value="" />*@
-                       @Html.HiddenFor(m => m.GroupId)
+                @Html.HiddenFor(m => m.GroupId)
             </div>
         </div>
     </div>

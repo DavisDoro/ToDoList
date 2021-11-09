@@ -74,7 +74,7 @@ namespace ToDoList.Controllers
         }
 
         // [CREATE] Post
-        [HttpPost] 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateGroup obj)
         {
@@ -106,7 +106,7 @@ namespace ToDoList.Controllers
         {
             Group obj = _context.Groups.Find(id);
 
-            return View(new AddMember { GroupName = obj.Name, GroupId = id});
+            return View(new AddMember { GroupName = obj.Name, GroupId = id });
         }
         //[ADD MEMBER] Post
         [Authorize]
@@ -140,7 +140,7 @@ namespace ToDoList.Controllers
             List<MemberAccess> accessList = _context.Accesses.ToList();
             foreach (var access in accessList)
             {
-                
+
                 if (access.GroupId == id)
                 {
                     _context.Accesses.Remove(access);

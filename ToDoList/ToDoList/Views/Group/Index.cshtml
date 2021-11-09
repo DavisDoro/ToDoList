@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<ToDoList.Models.Group>
 @{
-   var success = TempData["Success"] as string;
+    var success = TempData["Success"] as string;
 }
-    @if (!string.IsNullOrEmpty(success))
+@if (!string.IsNullOrEmpty(success))
 {
     <h3 class="alert-success" style="padding:20px;">@success</h3>
 }
-  <h2 class="text-black-50">TASK<span class="text-success">er</span> Group Manager</h2> <br />
-  <a class="btn btn-success" asp-controller="Group" asp-action="Create">Create new Group</a>
+<h2 class="text-black-50">TASK<span class="text-success">er</span> Group Manager</h2>
+<br />
+<a class="btn btn-success" asp-controller="Group" asp-action="Create">Create new Group</a>
 <div class="container" p-3>
 
     <br />
@@ -23,7 +24,7 @@
                         Description
                     </th>
                     <th>
-                        
+
                     </th>
                 </tr>
             </thead>

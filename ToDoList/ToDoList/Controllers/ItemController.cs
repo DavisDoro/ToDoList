@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoList.Controllers
 {
-    public class ItemController: Controller
+    public class ItemController : Controller
     {
         private readonly ApplicationDbContext _db;
         public ItemController(ApplicationDbContext db)
@@ -20,11 +20,11 @@ namespace ToDoList.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            
-            
+
+
             Itemrepository ItemrepositoryNew = new Itemrepository(_db);
             ;
-            
+
             return View(ItemrepositoryNew.GetItems());
 
         }

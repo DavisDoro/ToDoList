@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ToDoList.Models
 {
-    public class MemberAccess :DateBase
+    public class MemberAccess : DateBase
     {
         public int Id { get; set; }
         public string Email { get; set; }

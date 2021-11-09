@@ -2,7 +2,7 @@
 
 namespace ToDoList.Models
 {
-    public class DateBase
+    public abstract class DateBase
     {
         public DateTime TimeCreated { get; set; } = DateTime.Now;
         public DateTime LastEdited { get; set; }

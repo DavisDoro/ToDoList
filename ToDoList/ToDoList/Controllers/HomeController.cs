@@ -48,7 +48,7 @@ namespace ToDoList.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-  
+
         [HttpPost("register")]
         public async Task<IActionResult> SendData(UserRegister incomingUser)
         {
@@ -82,11 +82,11 @@ namespace ToDoList.Controllers
             return View("login");
         }
 
-    
+
         [HttpGet("login")]
         public IActionResult Login(string returnUrl)
         {
-            ViewData["ReturnUrl"]=returnUrl;
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -128,7 +128,7 @@ namespace ToDoList.Controllers
             ViewData["Message"] = "Use this page to detail your site's privacy policy.";
             return View("Privacy");
         }
-      
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -158,7 +158,7 @@ namespace ToDoList.Controllers
                 return View("secured");
             }
 
-            else 
+            else
             {
                 TempData["Success"] = "New password did not match.";
                 return View("home/secured");

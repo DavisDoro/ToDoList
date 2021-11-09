@@ -28,8 +28,8 @@
                     <th>
                         DeadlineDate
                     </th>
-                     <th>
-                       Priority
+                    <th>
+                        Priority
                     </th>
                     <th>
                         Status
@@ -40,23 +40,23 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td width="10%">@item.ItemName</td>
-                    <td width="30%">@item.ItemDescription</td>
-                    <td width="15%">@item.ResponsibleUser</td>
-                    <td width="10%">@item.DeadlineDate</td>
+                    <tr>
+                        <td width="10%">@item.ItemName</td>
+                        <td width="30%">@item.ItemDescription</td>
+                        <td width="15%">@item.ResponsibleUser</td>
+                        <td width="10%">@item.DeadlineDate</td>
 
-                    <td width="10%">@item.Priority</td>
+                        <td width="10%">@item.Priority</td>
 
-                    <td width="10%">
-                        <div class="w-100 btn-group ">
+                        <td width="10%">
+                            <div class="w-100 btn-group ">
 
-                            <a asp-controller="Item" asp-action="DeletePost" asp-route-Id="@item.Id" class="btn btn-primary ">Done</a>
-                        </div>
-                    </td>
+                                <a asp-controller="Item" asp-action="DeletePost" asp-route-Id="@item.Id" class="btn btn-primary ">Done</a>
+                            </div>
+                        </td>
 
 
-                </tr>
+                    </tr>
                 }
             </tbody>
         </table>
