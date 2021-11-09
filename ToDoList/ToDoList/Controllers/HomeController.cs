@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ToDoList.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ToDoList.Data;
+using System.Threading;
 
 namespace ToDoList.Controllers
 {
@@ -36,6 +37,9 @@ namespace ToDoList.Controllers
         [Authorize]
         public IActionResult Secured()
         {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            ViewBag.userEmail = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             return View();
         }
         [HttpGet("register")]
@@ -44,35 +48,7 @@ namespace ToDoList.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-        //[HttpPost("register")]
-        //public async Task<IActionResult> SendData(string email, string username, string password, string confirmPassword)
-        //{
-        //    if (await _authRepo.UserExists(email))
-        //    {
-        //        TempData["Error"] = "Error. This email address is already in use";
-        //        return View("register");
-        //    }
-        //    if (password != confirmPassword)
-        //    {
-        //        TempData["Error"] = "Error. Password did not match";
-        //        return View("register");
-        //    }
-        //    var user = new User
-        //    {
-        //        Username = username,
-        //        Email = email,
-        //    };
-        //    _authRepo.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-        //    user.PasswordHash = passwordHash;
-        //    user.PasswordSalt = passwordSalt;
-
-        //    _context.Users.Add(user);
-        //    await _context.SaveChangesAsync();
-
-        //    TempData["Error"] = "Reg complete.";
-        //    return View("login");
-        //}
+  
         [HttpPost("register")]
         public async Task<IActionResult> SendData(UserRegister incomingUser)
         {
@@ -133,7 +109,7 @@ namespace ToDoList.Controllers
             else // get cookie and claims for logged in user
             {
                 var claims = new List<Claim>();
-                claims.Add(new Claim("username", user.Username));
+                claims.Add(new Claim(ClaimTypes.Name, user.Username));
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Email));
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -157,6 +133,48 @@ namespace ToDoList.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Authorize]
+        [HttpPost("changepassform")]
+        public async Task<IActionResult> ChangePassword(string password, string newPassword)
+        {
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            string userEmail = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower().Equals(userEmail.ToLower()));
+
+            if (_authRepo.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
+                //change password here
+                _authRepo.CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+
+                await _context.SaveChangesAsync();
+
+                TempData["Error"] = "Your password has been changed succesfully.";
+                return View("secured");
+            }
+
+            else 
+            {
+                TempData["Success"] = "New password did not match.";
+                return View("home/secured");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("changepassform")]
+        public IActionResult ChangePassForm(string returnUrl)
+        {
+            var identity = ClaimTypes.Name;
+
+            // get information about the user from the properties of the ClaimsIdentityProxy object
+
+            Console.WriteLine(identity);
+            return View();
         }
     }
 }

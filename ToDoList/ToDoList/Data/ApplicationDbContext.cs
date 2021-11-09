@@ -16,5 +16,7 @@ namespace ToDoList.Data
 
         public DbSet<Item> Items { get; set; }
         public DbSet<User> Users {  get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<MemberAccess> Accesses { get; set; }
     }
 }

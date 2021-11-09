@@ -1,25 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Group TASKer";
+    var error = TempData["Error"] as string;
 }
-@*    <style type="text/css">
-    .bgimg {
-    background-image: url('../images/desk-top-view.jpg');
-    height: 700px;
-    }
-    </style>*@
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <h3 class="alert-success" style="padding:20px;">@error</h3>
+}
 <div class="content_center" form="welcome-form">
     <div class="col">
         <div class="row welcome-text">
-        <h1 class="text-center">Try Group TASKer now</h1>
+            <h1 class="text-center">Try TASK<span class="text-success">er</span> groups now</h1>
         </div>
+        <div class="row welcome-text">
+                <h4>Log in to join your team and start doing those important tasks right now.</h4>
+        </div>
+        <div class="row welcome-text">
 
-    <div class="row welcome-text">
-        <p class="card-text text-center">
-            <h4>Log in to join your team and start doing those important tasks right now.</h4>
-    </div>
-    <div class="row welcome-text">
-        </p>
-        <a href="/login" class="btn btn-outline-light mr-3 btn-lg">Log in</a><a href="/register" class="btn btn-outline-light btn-lg">Sign up</a>
-    </div>
+            <a href="/login" class="btn btn-outline-light mr-3 btn-lg">Log in</a><a href="/register" class="btn btn-outline-light btn-lg">Sign up</a>
+        </div>
     </div>
 </div>

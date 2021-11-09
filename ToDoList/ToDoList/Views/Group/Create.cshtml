@@ -1,0 +1,42 @@
+﻿@model ToDoList.Data.CreateGroup
+
+<form method="post" asp-action="Create">
+
+    <div class="form-group row">
+        <h2 class="text-black-50 pl-3">Create Group</h2>
+    </div>
+
+    <div class="col-12">
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Name"></label>
+            </div>
+            <div class="col-3">
+                <label asp-for="Description"></label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <br />
+                 <div class="form-group row">
+   
+                <div class="col">
+                    <input type="submit" class="btn btn-info w-200 mx-auto" value="Create Group" />
+                </div>
+                <div class="col">
+                    <a class="btn btn-danger w-200 mx-auto" asp-action="Index">Back</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
