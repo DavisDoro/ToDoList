@@ -75,6 +75,30 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET Edit
+        public IActionResult Edit(int? id)
+        {
 
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var obj = _db.Items.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            return View(obj);
+        }
+
+        //Post-Create method
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Item obj)
+        {
+            _db.Items.Update(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
