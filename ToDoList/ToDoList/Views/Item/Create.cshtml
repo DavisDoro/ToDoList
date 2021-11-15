@@ -1,5 +1,8 @@
 ﻿@model ToDoList.Models.Item
+@{
 
+    Html.HiddenFor(m => m.BelongsToGroupId);
+}
 <form method="post" asp-action="Create">
     <div class="border p-3">
         <div class="form-group row">
@@ -68,7 +71,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </form>
 

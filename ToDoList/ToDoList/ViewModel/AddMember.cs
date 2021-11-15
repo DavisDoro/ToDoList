@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ToDoList.Data
+namespace ToDoList.ViewModel
 {
     public class AddMember
     {

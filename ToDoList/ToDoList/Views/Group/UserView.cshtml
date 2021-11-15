@@ -15,9 +15,6 @@
                     <th>
                         Description
                     </th>
-                    <th>
-
-                    </th>
                 </tr>
             </thead>
 
@@ -25,18 +22,18 @@
                 @foreach (var group in Model)
                 {
                     <tr>
-                        <td width="20%">@group.Name</td>
-                        <td width="40%">@group.Description</td>
+                        <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Name</a></td>
+                        <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Description</a></td>
                     </tr>
                 }
             </tbody>
         </table>
-
     }
+
     else
     {
         <p>You are not a member of any group yet</p>
     }
-
+      @*</form>*@
 </div>
 

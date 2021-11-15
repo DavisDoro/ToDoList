@@ -7,9 +7,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ToDoList.Data;
 using ToDoList.Models;
+using ToDoList.ViewModel;
 
 namespace ToDoList.Controllers
 {
+    [Authorize]
     public class GroupController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +20,7 @@ namespace ToDoList.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         public IActionResult Index()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -34,12 +36,13 @@ namespace ToDoList.Controllers
             return View(objList);
         }
 
+        [HttpGet]
         public IActionResult UserView()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             List<Group> userGroup = new List<Group>();
 
-            foreach (var access in _context.Accesses)
+            foreach (var access in _context.Accesses) // TODO: Accesses to list first
             {
                 if (access.Email == claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value)
                 {
@@ -49,16 +52,23 @@ namespace ToDoList.Controllers
             }
             return View(userGroup);
         }
-
-        // [CREATE] Get
-        [Authorize]
-        public IActionResult Create()
+        [HttpPost]
+        public IActionResult ViewGroupPost(Group group)
         {
-            return View();
+            return RedirectToAction("item/Create");
+        }
+
+        // [Group Content] Get
+        //[HttpGet("UserView/{id}")]
+        public IActionResult ViewGroup(Group group)
+        {
+            var Id = group.Id;
+            //TODO Get item list for this group from GroupContent table
+
+            return View("ViewGroup", group);
         }
 
         //[DELETE] Get
-        [Authorize]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -68,14 +78,19 @@ namespace ToDoList.Controllers
             var group = _context.Groups.Find(id);
             if (group == null)
             {
-                return NotFound();
+                return NotFound(); //not found exception
             }
             return View(group);
         }
 
+        // [CREATE] Get
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         // [CREATE] Post
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(CreateGroup obj)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -100,7 +115,6 @@ namespace ToDoList.Controllers
         }
 
         //[ADD MEMBER] Get
-        [Authorize]
         [HttpGet("AddMember/{id}")]
         public IActionResult AddMember(int id)
         {
@@ -108,21 +122,22 @@ namespace ToDoList.Controllers
 
             return View(new AddMember { GroupName = obj.Name, GroupId = id });
         }
+
         //[ADD MEMBER] Post
-        [Authorize]
         [HttpPost("AddMember/{id}")]
         public async Task<IActionResult> AddMember(AddMember obj)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower().Equals(obj.Email.ToLower()));
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower() == obj.Email.ToLower());
             if (user == null)
             {
                 TempData["Error"] = $"User with email {obj.Email} does not exist.";
                 return RedirectToAction("AddMember");
             }
+
             MemberAccess access = new MemberAccess();
             access.Email = obj.Email;
             access.GroupId = obj.GroupId;
-            System.Console.WriteLine(obj.GroupId);
+            //System.Console.WriteLine(obj.GroupId);
             access.Role = "User";
             access.Status = true;
 
@@ -134,13 +149,11 @@ namespace ToDoList.Controllers
         }
 
         // [DELETE] Post
-        [Authorize]
         public IActionResult DeleteGroup(int id)
         {
             List<MemberAccess> accessList = _context.Accesses.ToList();
             foreach (var access in accessList)
             {
-
                 if (access.GroupId == id)
                 {
                     _context.Accesses.Remove(access);

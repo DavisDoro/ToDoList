@@ -17,16 +17,14 @@ namespace ToDoList.Controllers
         {
             _db = db;
         }
+
         [Authorize]
         public IActionResult Index()
         {
-
-
             Itemrepository ItemrepositoryNew = new Itemrepository(_db);
             ;
 
             return View(ItemrepositoryNew.GetItems());
-
         }
 
         //GET-create
@@ -35,6 +33,15 @@ namespace ToDoList.Controllers
         {
             return View();
         }
+        //GET-create
+        //[Authorize]
+        //public IActionResult Create(int id)
+        //{
+        //    Item createItem = new Item();
+        //    createItem.BelongsToGroupId = id;
+
+        //    return View(createItem);
+        //}
 
         //Post-Create method
         [HttpPost]
@@ -46,11 +53,9 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
-
         // GET Delete
         public IActionResult Delete(int? id)
         {
-
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -74,7 +79,5 @@ namespace ToDoList.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-
     }
 }

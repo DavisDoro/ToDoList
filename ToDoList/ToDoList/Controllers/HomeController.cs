@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ToDoList.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ToDoList.Data;
+using ToDoList.ViewModel;
 using System.Threading;
 
 namespace ToDoList.Controllers

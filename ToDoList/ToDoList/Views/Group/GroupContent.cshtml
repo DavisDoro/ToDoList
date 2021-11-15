@@ -1,0 +1,10 @@
+﻿@model ToDoList.Models.Group
+
+@{
+    Html.HiddenFor(m => m.Id);
+}
+<h3>Group X content</h3>
+<form method="post" asp-action="GroupContent">
+
+    <a class="btn btn-primary" asp-controller="Group" asp-action="GroupContent">Create new Item</a>
+</form>

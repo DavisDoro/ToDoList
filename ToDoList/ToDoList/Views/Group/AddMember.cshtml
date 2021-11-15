@@ -1,4 +1,4 @@
-﻿@model ToDoList.Data.AddMember
+﻿@model ToDoList.ViewModel.AddMember
 @{
     var error = TempData["Error"] as string;
     Html.HiddenFor(m => m.GroupId);
@@ -37,7 +37,5 @@
         </div>
     </div>
 </form>
-@{
-    Console.WriteLine($"group id {Model.GroupId}");
-}
+
 

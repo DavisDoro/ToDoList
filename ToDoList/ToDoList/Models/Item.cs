@@ -21,6 +21,8 @@ namespace ToDoList.Models
         public string ItemDescription { get; set; }
         [DisplayName("Resposible User")]
         public string ResponsibleUser { get; set; }
+        [DisplayName("Belongs to Group ")]
+        public int BelongsToGroupId { get; set; }
 
         public DateTime DeadlineDate { get; set; }
         public Priority Priority { get; set; }
