@@ -1,18 +1,22 @@
-﻿using ToDoList.Data;
-using ToDoList.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ToDoList.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using ToDoList.Models;
+
 
 namespace ToDoList.Controllers
 {
     public class ItemController : Controller
     {
         private readonly ApplicationDbContext _db;
+
         public ItemController(ApplicationDbContext db)
         {
             _db = db;
@@ -33,17 +37,45 @@ namespace ToDoList.Controllers
         [Authorize]
         public IActionResult Create()
         {
+            IEnumerable<User> userview = _db.Users;
+            List<string> userlist = new List<string> { };
+
+            foreach (var username in userview)
+            {
+                userlist.Add(username.Username);
+            }
+            ViewBag.Users = new SelectList(userlist);
             return View();
         }
+        [HttpPost]
+        public ActionResult Drop(FormCollection form)
+        {
+            var optionsValue = form["Options"];
+
+            return RedirectToAction("Drop");
+        }
+
 
         //Post-Create method
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Item obj)
         {
+            IEnumerable<User> objList = _db.Users;
+            if(obj.DeadlineDate < DateTime.Now)
+            {
+                return RedirectToAction("ErrorDate");
+            }  
+
+            obj.UserId = (from user in objList
+                          where obj.ResponsibleUser == user.Username
+                          select user.Id).FirstOrDefault();
+
+
             _db.Items.Add(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
+
         }
 
 
@@ -88,6 +120,14 @@ namespace ToDoList.Controllers
             {
                 return NotFound();
             }
+            IEnumerable<User> userview = _db.Users;
+            List<string> userlist = new List<string> { };
+
+            foreach (var username in userview)
+            {
+                userlist.Add(username.Username);
+            }
+            ViewBag.Users = new SelectList(userlist);
             return View(obj);
         }
 
@@ -96,9 +136,23 @@ namespace ToDoList.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Item obj)
         {
+            IEnumerable<User> objList = _db.Users;
+            if (obj.DeadlineDate < DateTime.Now)
+            {
+                return RedirectToAction("ErrorDate");
+            }
+            obj.UserId = (from user in objList
+                          where obj.ResponsibleUser == user.Username
+                          select user.Id).FirstOrDefault();
             _db.Items.Update(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult ErrorDate()
+        {
+            return View();
+
         }
     }
 }

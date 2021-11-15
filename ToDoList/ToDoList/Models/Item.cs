@@ -24,5 +24,8 @@ namespace ToDoList.Models
 
         public DateTime DeadlineDate { get; set; }
         public Priority Priority { get; set; }
+        public int? UserId { get; set; }
+        public virtual User User { get; set; }
+
     }
 }

@@ -1,75 +1,87 @@
 ﻿@model ToDoList.Models.Item
 
 <form method="post" asp-action="Edit">
-<input asp-for="Id" hidden />
+    <input asp-for="Id" hidden />
     <div class="border p-3">
         <div class="form-group row">
             <h2 class="text-black-50 pl-3">Edit Item</h2>
         </div>
-        <div class="col-12">
+        <div class="col-7">
             <div class="form-group row">
-                <div class="col-2">
+                <div class="col-3">
                     <label asp-for="ItemName"></label>
                 </div>
+                <div class="col-4">
+                    <input asp-for="ItemName" class="form-control" />
+                    <span asp-validation-for="ItemName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="form-group row">
                 <div class="col-3">
                     <label asp-for="ItemDescription"></label>
                 </div>
+                <div class="col-4">
+                    <input asp-for=" ItemDescription" class="form-control" />
+                    <span asp-validation-for="ItemDescription" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="form-group row">
                 <div class="col-3">
                     <label asp-for="ResponsibleUser"></label>
                 </div>
+
+                @using (Html.BeginForm())
+                {
+                    <div class="col-4">
+
+                        @Html.DropDownList("ResponsibleUser", ViewBag.Users as SelectList, new { style = "width: 250px;height: 37px;" })
+
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="form-group row">
                 <div class="col-2">
                     <label asp-for="DeadlineDate"></label>
                 </div>
+                <div class="col-6">
+                    <input asp-for="DeadlineDate" class="form-control" />
+                    <span asp-validation-for="DeadlineDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="form-group row">
                 <div class="col-2">
-                    <label asp-for="Priority"></label>
+                    <label asp-for="Priority "></label>
                 </div>
-            </div>
-        </div>
+                <div class="col-3">
+                    <ul>Lo No Hi</ul>
+                </div>
+                <div class="col-2">
+                    <input id="Priority" name="Priority" value="Low" type="radio">
+                    <input id="Priority" checked="checked" name="Priority" value="Normal" type="radio">
+                    <input id="Priority" name="Priority" value="High" type="radio">
+                </div>
 
-        <div class="col-11">
-            <ul align=right>Lo No Hi</ul>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-2">
-                <input asp-for="ItemName" class="form-control" />
-                <span asp-validation-for="ItemName" class="text-danger"></span>
-
-            </div>
-            <div class="col-3">
-
-                <input asp-for=" ItemDescription" class="form-control" />
-                <span asp-validation-for="ItemDescription" class="text-danger"></span>
-
-            </div>
-            <div class="col-3">
-                <input asp-for="ResponsibleUser" class="form-control" />
-                <span asp-validation-for="ResponsibleUser" class="text-danger"></span>
-
-            </div>
-            <div class="col-2">
-                <input asp-for="DeadlineDate" class="form-control" />
-
-                <span asp-validation-for="DeadlineDate" class="text-danger"></span>
-
-            </div>
-            <div class="col-2">
-                <input id="Priority" name="Priority" value="Low" type="radio">
-                <input id="Priority" name="Priority" value="Normal" type="radio">
-                <input id="Priority" name="Priority" value="High" type="radio">
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-8 offset-2 text-center row">
-                <div class="col">
-                    <input type="submit" class="btn btn-info w-75" value="Save" />
-                </div>
-                <div class="col">
-                    <a class="btn btn-danger w-75" asp-action="Index">Back</a>
+ 
+                <div class="col-8">
+                    <input type="submit" class="btn btn-info w-25" value="Save" />
+
+                    <a class="btn btn-danger w-25" asp-action="Index">Back</a>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
+  
+
 </form>
+
 
