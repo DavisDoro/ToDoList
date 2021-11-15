@@ -14,10 +14,13 @@ Pamat funkcijas:
 
 1) Pievienot ierakstu [done]
 2) Dzest ierakstu [done]
-3) Regiget ierakstu -// Janis pie šī strādā
+3) Regiget ierakstu [done]
 4) Definet atbildigo [sort of]
 5) Definet piority [done]
 6) History table
-7) Login functionality
-8) Implement parent class for homework (Lesson 10)
+7) Login functionality [done]
+8) Implement parent class for homework (Lesson 10) [done]
 9) Unit testi datubāzei ?
+10) Create Item input lauku novietojums vertikali viens zem otra
+11) Create Item default priority = normal, DateTime check isFuture
+12) Implementeet try and catch - majasdarbs (Lesson 11)

@@ -34,6 +34,9 @@
                     <th>
                         Status
                     </th>
+                     <th>
+                        Changes
+                    </th>
                 </tr>
             </thead>
 
@@ -52,6 +55,11 @@
                             <div class="w-100 btn-group ">
 
                                 <a asp-controller="Item" asp-action="DeletePost" asp-route-Id="@item.Id" class="btn btn-primary ">Done</a>
+                            </div>
+                         <td width="10%">
+                             <div class="w-100 btn-group ">
+
+                                <a asp-controller="Item" asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-warning ">Edit</a>
                             </div>
                         </td>
 
