@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ToDoList.Data;
 using ToDoList.Models;
+using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
@@ -34,26 +35,72 @@ namespace ToDoList.Controllers
             return View(objList);
         }
 
-        public IActionResult UserView()
+        [Authorize]
+        public IActionResult GroupListView()
         {
+
             var claimsIdentity = User.Identity as ClaimsIdentity;
+            string userEmail = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             List<Group> userGroup = new List<Group>();
+
+
+            //List<MemberAccess> memberAccess = _context.Accesses.Where(u => u.Email == userEmail).ToList();
+
+
+            //var linqList = from users in _context.Accesses
+            //where users.Email == userEmail
+
 
             foreach (var access in _context.Accesses)
             {
-                if (access.Email == claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value)
+                if (access.Email == claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value.ToLower())
                 {
-                    int groupId = access.GroupId;
-                    userGroup.Add(_context.Groups.Find(groupId));
+                    userGroup.Add(_context.Groups.Find(access.GroupId));
+                    
                 }
             }
             return View(userGroup);
+        }
+
+        public IActionResult ViewGroup(Group obj)
+        {
+            List<Item> itemList = new List<Item>();
+            List<Group> groupList = new List<Group>();
+
+
+            foreach (var group in _context.Groups)
+            {
+                if (group.Id == obj.Id)
+                {
+                    groupList.Add(group);
+                }
+            }
+
+            foreach (var item in _context.Items)
+            {
+                if (item.GroupId == obj.Id)
+                {
+                    itemList.Add(item);
+                }
+            }
+            List<Group> groups = new List<Group>();
+            groups.Add(obj);
+
+            GroupAndItemModel viewItem = new GroupAndItemModel()
+            {
+                Groups = groupList,
+                Items = itemList
+            };
+
+            return View(viewItem);
         }
 
         // [CREATE] Get
         [Authorize]
         public IActionResult Create()
         {
+            
             return View();
         }
 
@@ -108,6 +155,7 @@ namespace ToDoList.Controllers
 
             return View(new AddMember { GroupName = obj.Name, GroupId = id });
         }
+
         //[ADD MEMBER] Post
         [Authorize]
         [HttpPost("AddMember/{id}")]
@@ -119,6 +167,7 @@ namespace ToDoList.Controllers
                 TempData["Error"] = $"User with email {obj.Email} does not exist.";
                 return RedirectToAction("AddMember");
             }
+
             MemberAccess access = new MemberAccess();
             access.Email = obj.Email;
             access.GroupId = obj.GroupId;

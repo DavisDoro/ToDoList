@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<ToDoList.Models.Group>
+@{
 
+}
 <h2 class="text-black-50">Your TASK<span class="text-success">er</span> Groups</h2>
 <div class="container" p-3>
 
@@ -15,9 +17,6 @@
                     <th>
                         Description
                     </th>
-                    <th>
-
-                    </th>
                 </tr>
             </thead>
 
@@ -25,8 +24,8 @@
                 @foreach (var group in Model)
                 {
                     <tr>
-                        <td width="20%">@group.Name</td>
-                        <td width="40%">@group.Description</td>
+                        <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Name</a></td>
+                        <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Description</a></td>
                     </tr>
                 }
             </tbody>

@@ -114,7 +114,7 @@ namespace ToDoList.Controllers
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
-                return Redirect("/item");
+                return Redirect("/Group/GroupListView");
             }
         }
         [Authorize]

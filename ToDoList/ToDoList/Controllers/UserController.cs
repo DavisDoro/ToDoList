@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ToDoList.Data;
 using ToDoList.Models;
 
@@ -28,9 +24,6 @@ namespace ToDoList.Controllers
             return View(objList);
         }
 
-
-
-
         // GET Delete
         public IActionResult Delete(int? id)
         {
@@ -46,6 +39,7 @@ namespace ToDoList.Controllers
             }
             return View(obj);
         }
+
         //POST Delete
         public IActionResult DeletePOST(int? id)
         {
@@ -84,7 +78,6 @@ namespace ToDoList.Controllers
             int userId = obj.Id;
             string userName = obj.Username;
 
-
             IEnumerable<Item> itemList = db.Items;
 
             foreach (var item in itemList)
@@ -99,9 +92,5 @@ namespace ToDoList.Controllers
 
             return RedirectToAction("Index");
         }
-        
-        
-
-
     }
 }

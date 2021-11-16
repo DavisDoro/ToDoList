@@ -1,9 +1,10 @@
 ﻿@model ToDoList.Models.Item
 @{
+    Html.HiddenFor(m => m.GroupId);
         var returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
-<form asp-route-returnurl="@returnUrl" method="post" asp-action="Create">
+<form asp-route-returnurl = "@returnUrl" method="post" asp-action="Create">
     <input asp-for="Id" hidden />
     <div class="border p-3">
         <div class="form-group row">
@@ -56,10 +57,11 @@
                 </div>
                 <div class="col-5">
                 <input asp-for="DeadlineDate" class="form-control" />
-                <span asp-validation-for="DeadlineDate" class="text-danger"></span>
+                <span asp-validation-for="DeadlineDate" class="text-danger" value="@DateTime.Today + 1"></span>
                 </div>
             </div>
         </div>
+
         <div class="col-7">
             <div class="form-group row">
                     <div class="col-2">
@@ -72,6 +74,7 @@
                         <input id="Priority" name="Priority" value="Low" type="radio">
                         <input id="Priority" checked="checked" name="Priority" value="Normal" type="radio">
                         <input id="Priority" name="Priority" value="High" type="radio">
+                       @Html.HiddenFor(m => m.GroupId)
                     </div>
                </div>
         </div>
@@ -90,4 +93,3 @@
 
 
 </form>
-

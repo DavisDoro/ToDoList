@@ -1,0 +1,78 @@
+﻿@model ToDoList.ViewModels.GroupAndItemModel
+
+@{
+    string thisGroupId = Model.Groups[0].Name;
+    Html.HiddenFor(m => m.Groups[0].Id);
+    int itemId;
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+}
+
+<h2 class="text-black-50"><span class="text-success">@thisGroupId</span> - task list</h2>
+
+<form method="post" asp-controller="Item" asp-action="CreateGroupItem">
+    <input type="submit" class="btn btn-success w-200 mx-1" value="Add Item" />
+    @Html.HiddenFor(m => m.Groups[0].Id)
+</form>
+@if (@Model.Items.Count() == 0)
+{
+    <br /><h5 class="text-black-50"> There are no tasks currently, take a coffee break</h5>
+}
+else
+{
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Task Name
+                </th>
+                <th>
+                    Task Description
+                </th>
+                <th>
+                    Responsible User
+                </th>
+                <th>
+                    DeadlineDate
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Changes
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td width="10%">@item.ItemName</td>
+                    <td width="30%">@item.ItemDescription</td>
+                    <td width="15%">@item.ResponsibleUser</td>
+                    <td width="10%">@item.DeadlineDate</td>
+
+                    <td width="10%">@item.Priority</td>
+
+                    <td width="10%">
+                        <div class="w-100 btn-group ">
+
+                            @Html.HiddenFor(id => item.Id)
+                            <a asp-controller="Item" asp-action="DeletePost" asp-route-Id="@item.Id" class="btn btn-primary">Done</a>
+                        </div>
+                    <td width="10%">
+                        <div class="w-100 btn-group ">
+
+                            <a asp-controller="Item" asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-warning">Edit</a>
+                        </div>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

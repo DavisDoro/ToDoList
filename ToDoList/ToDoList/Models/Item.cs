@@ -21,7 +21,7 @@ namespace ToDoList.Models
         public string ItemDescription { get; set; }
         [DisplayName("Resposible User")]
         public string ResponsibleUser { get; set; }
-
+        public int GroupId { get; set; }
         public DateTime DeadlineDate { get; set; }
         public Priority Priority { get; set; }
         public int? UserId { get; set; }

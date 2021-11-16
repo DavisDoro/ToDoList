@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,10 +8,11 @@ using ToDoList.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ToDoList.Models;
-
+using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
+    [Authorize]
     public class ItemController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -21,20 +21,14 @@ namespace ToDoList.Controllers
         {
             _db = db;
         }
-        [Authorize]
+
         public IActionResult Index()
         {
-
-
             Itemrepository ItemrepositoryNew = new Itemrepository(_db);
-            ;
-
             return View(ItemrepositoryNew.GetItems());
-
         }
 
         //GET-create
-        [Authorize]
         public IActionResult Create()
         {
             IEnumerable<User> userview = _db.Users;
@@ -47,14 +41,40 @@ namespace ToDoList.Controllers
             ViewBag.Users = new SelectList(userlist);
             return View();
         }
+
+        [HttpPost]
+        public IActionResult CreateGroupItem(GroupAndItemModel group)
+        {
+            int groupId = group.Groups[0].Id;
+            List<string> groupUserEmail = new List<string> { };
+            List<string> userList = new List<string> { };
+
+            List<MemberAccess> memberAccess = _db.Accesses.Where(u => u.GroupId == groupId).ToList();
+
+            foreach (var user in memberAccess)
+            {
+                    groupUserEmail.Add(user.Email);
+            }
+            foreach (var email in groupUserEmail)
+            {
+                List<User> users = _db.Users.Where(u => u.Email == email).ToList();
+                userList.Add(users[0].Username);
+            }
+
+            Item viewItem = new Item();
+            viewItem.GroupId = groupId;
+
+            ViewBag.Users = new SelectList(userList);
+
+            return View(viewItem);
+        }
+
         [HttpPost]
         public ActionResult Drop(FormCollection form)
         {
             var optionsValue = form["Options"];
-
             return RedirectToAction("Drop");
         }
-
 
         //Post-Create method
         [HttpPost]
@@ -65,24 +85,23 @@ namespace ToDoList.Controllers
             if(obj.DeadlineDate < DateTime.Now)
             {
                 return RedirectToAction("ErrorDate");
-            }  
+            }
 
             obj.UserId = (from user in objList
                           where obj.ResponsibleUser == user.Username
                           select user.Id).FirstOrDefault();
 
-
             _db.Items.Add(obj);
             _db.SaveChanges();
-            return RedirectToAction("Index");
 
+            int groupId = obj.GroupId;
+
+            return RedirectToAction("ViewGroup", "Group", new { id = groupId });
         }
-
 
         // GET Delete
         public IActionResult Delete(int? id)
         {
-
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -102,15 +121,21 @@ namespace ToDoList.Controllers
             {
                 return NotFound();
             }
+            int groupId = obj.GroupId;
+ 
             _db.Items.Remove(obj);
             _db.SaveChanges();
+
+            if (!string.IsNullOrEmpty(groupId.ToString()))
+            {
+                return RedirectToAction("ViewGroup", "Group", new { id = groupId });
+            }
             return RedirectToAction("Index");
         }
 
         // GET Edit
         public IActionResult Edit(int? id)
         {
-
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -152,7 +177,6 @@ namespace ToDoList.Controllers
         public IActionResult ErrorDate()
         {
             return View();
-
         }
     }
 }
