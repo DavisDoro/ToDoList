@@ -1,4 +1,4 @@
-﻿@model ToDoList.ViewModels.GroupAndItemModel
+﻿@model ToDoList.ViewModels.GroupAndItemModel 
 
 @{
     string thisGroupId = Model.Groups[0].Name;
@@ -12,10 +12,12 @@
     <input type="submit" class="btn btn-success w-200 mx-1 float-left" value="Add Item" />
     @Html.HiddenFor(m => m.Groups[0].Id)
 </form>
+
 <form method="get" asp-controller="Item" asp-action="ViewHistory">
     <input type="submit" class="btn btn-secondary w-200 mx-1 float-left" value="Completed tasks" />
     @Html.HiddenFor(m => m.Groups[0].Id)
 </form>
+
 <br />
 @if (@Model.Items.Count() == 0)
 {
@@ -73,8 +75,6 @@ else
                             <a asp-controller="Item" asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-secondary  w-200 mx-1">Edit</a>
                         </div>
                     </td>
-
-
                 </tr>
             }
         </tbody>

@@ -1,6 +1,6 @@
 ﻿@model ToDoList.ViewModels.ViewGroupsModel
 @{
-    Html.HiddenFor(m => m.Accesses[0]);
+    //Html.HiddenFor(m => m.Accesses[0]);
 }
 <h2 class="text-black-50">Your TASK<span class="text-success">er</span> Groups</h2>
 <div class="container" p-3>
@@ -23,8 +23,8 @@
                 </h5> <hr />
             }
         }
-
     }
+
     @if (Model.Groups.Count() != 0)
     {
         <table class="table table-bordered round" style="width:100%">
@@ -41,7 +41,6 @@
                     </th>
                 </tr>
             </thead>
-
             <tbody>
                 @foreach (var group in Model.Groups)
                 {
@@ -56,13 +55,9 @@
                 }
             </tbody>
         </table>
-
-
     }
     else
     {
         <p>You are not a member of any group yet</p>
     }
-
 </div>
-
