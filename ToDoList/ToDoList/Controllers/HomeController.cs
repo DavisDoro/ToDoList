@@ -68,7 +68,7 @@ namespace ToDoList.Controllers
             var user = new User
             {
                 Username = incomingUser.Username,
-                Email = incomingUser.Email,
+                Email = incomingUser.Email.ToLower(),
             };
             _authRepo.CreatePasswordHash(incomingUser.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

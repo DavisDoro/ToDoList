@@ -3,7 +3,6 @@
 @{
     string thisGroupId = Model.Groups[0].Name;
     Html.HiddenFor(m => m.Groups[0].Id);
-    int itemId;
     var returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
@@ -11,6 +10,10 @@
 
 <form method="post" asp-controller="Item" asp-action="CreateGroupItem">
     <input type="submit" class="btn btn-success w-200 mx-1" value="Add Item" />
+    @Html.HiddenFor(m => m.Groups[0].Id)
+</form>
+<form method="get" asp-controller="Item" asp-action="ViewHistory">
+    <input type="submit" class="btn btn-secondary w-200 mx-1 float-right" value="Completed tasks" />
     @Html.HiddenFor(m => m.Groups[0].Id)
 </form>
 @if (@Model.Items.Count() == 0)
@@ -76,3 +79,4 @@ else
         </tbody>
     </table>
 }
+<br/>

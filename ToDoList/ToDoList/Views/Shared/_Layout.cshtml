@@ -51,7 +51,7 @@
                     </ul>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a class="nav-link text-dark text-right" asp-area="" asp-controller="Home" asp-action="Logout"><p class="text-right">Logout (<span class="text-success">@User.Identity.Name</span>) </p></a>
+                        <a class="nav-link text-dark text-right" asp-area="" asp-controller="Home" asp-action="Logout"><p class="text-right navbar-nav flex-grow-1">Logout (<span class="text-success">@User.Identity.Name</span>) </p></a>
                     }
 
                 </div>

@@ -38,29 +38,29 @@ namespace ToDoList.Controllers
         [Authorize]
         public IActionResult GroupListView()
         {
-
             var claimsIdentity = User.Identity as ClaimsIdentity;
             string userEmail = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             List<Group> userGroup = new List<Group>();
-
-
-            //List<MemberAccess> memberAccess = _context.Accesses.Where(u => u.Email == userEmail).ToList();
-
-
-            //var linqList = from users in _context.Accesses
-            //where users.Email == userEmail
-
-
+            List<MemberAccess> accessForThisUser = new List<MemberAccess>();
             foreach (var access in _context.Accesses)
             {
                 if (access.Email == claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value.ToLower())
                 {
+
                     userGroup.Add(_context.Groups.Find(access.GroupId));
-                    
+
+                    accessForThisUser.Add(access);
                 }
             }
-            return View(userGroup);
+            ViewGroupsModel viewModel = new ViewGroupsModel()
+            {
+                Groups = userGroup,
+                Accesses = accessForThisUser
+            };
+
+
+            return View(viewModel);
         }
 
         public IActionResult ViewGroup(Group obj)
@@ -100,7 +100,7 @@ namespace ToDoList.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            
+
             return View();
         }
 
@@ -169,11 +169,11 @@ namespace ToDoList.Controllers
             }
 
             MemberAccess access = new MemberAccess();
-            access.Email = obj.Email;
+            access.Email = obj.Email.ToLower();
             access.GroupId = obj.GroupId;
             System.Console.WriteLine(obj.GroupId);
             access.Role = "User";
-            access.Status = true;
+            access.Status = false;
 
             _context.Accesses.Add(access);
             _context.SaveChanges();
@@ -182,6 +182,15 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult JoinGroup(MemberAccess model)
+        {
+            int accessId = model.Id;
+            MemberAccess access = _context.Accesses.Find(model.Id);
+            access.Status = true;
+            _context.Accesses.Update(access);
+            _context.SaveChanges();
+            return RedirectToAction("GroupListView");
+        }
         // [DELETE] Post
         [Authorize]
         public IActionResult DeleteGroup(int id)

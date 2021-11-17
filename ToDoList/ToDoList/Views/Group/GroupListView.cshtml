@@ -1,35 +1,62 @@
-﻿@model IEnumerable<ToDoList.Models.Group>
+﻿@model ToDoList.ViewModels.ViewGroupsModel
 @{
-
+    Html.HiddenFor(m => m.Accesses[0]);
 }
 <h2 class="text-black-50">Your TASK<span class="text-success">er</span> Groups</h2>
 <div class="container" p-3>
 
     <br />
-    @if (Model.Count() != 0)
+    @if (Model.Accesses.Count() != 0)
+    {
+        @foreach (var access in Model.Accesses)
+        {
+            if (!access.Status)
+            {
+                <h5 class="text-black-50">
+  
+                    You have pending invite to join <span class="text-success">@Model.Groups.FirstOrDefault(g => g.Id == access.GroupId).Name   </span>
+                    <form method="post" asp-controller="Group" asp-action="JoinGroup">
+                        <input type="submit" class="btn btn-success w-200 btn-sm mx-15" value="Accept" />
+                        @Html.HiddenFor(m => m.Accesses.FirstOrDefault(x => x.Id == access.Id).Id)
+                    </form>
+
+                </h5> <hr />
+            }
+        }
+
+    }
+    @if (Model.Groups.Count() != 0)
     {
         <table class="table table-bordered round" style="width:100%">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
-                    <th>
+                    <th scope="col">
+                        ID
+                    </th>
+                    <th scope="col">
                         Group Name
                     </th>
-                    <th>
+                    <th scope="col">
                         Description
                     </th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach (var group in Model)
+                @foreach (var group in Model.Groups)
                 {
-                    <tr>
+                    if (Model.Accesses.Find(x => x.GroupId == group.Id).Status)
+                    {
+                        <tr scope="col">
+                            <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Id</a></td>
                         <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Name</a></td>
                         <td><a asp-action="ViewGroup" asp-controller="Group" asp-route-Id="@group.Id">@group.Description</a></td>
                     </tr>
+                    }
                 }
             </tbody>
         </table>
+
 
     }
     else

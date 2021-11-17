@@ -41,6 +41,22 @@ namespace ToDoList.Controllers
             ViewBag.Users = new SelectList(userlist);
             return View();
         }
+        [HttpGet]
+        public IActionResult ViewHistory(GroupAndItemModel model)
+        {
+            int groupId = model.Groups[0].Id;
+
+            List<CompletedTask> completedItems = _db.CompletedTasks.Where(t => t.GroupId == groupId).ToList();
+            List<Group> thisGroup = _db.Groups.Where(g => g.Id == groupId).ToList();
+
+            CompletedTaskViewModel viewModel = new CompletedTaskViewModel()
+            {
+                Groups = thisGroup,
+                Items = completedItems
+            };
+
+            return View(viewModel);
+        }
 
         [HttpPost]
         public IActionResult CreateGroupItem(GroupAndItemModel group)
@@ -111,6 +127,8 @@ namespace ToDoList.Controllers
             {
                 return NotFound();
             }
+            
+
             return View(obj);
         }
         //POST Delete
@@ -122,7 +140,17 @@ namespace ToDoList.Controllers
                 return NotFound();
             }
             int groupId = obj.GroupId;
- 
+
+            var completedTask = new CompletedTask()
+            {
+                ItemName = obj.ItemName,
+                ItemDescription = obj.ItemDescription,
+                ResponsibleUser = obj.ResponsibleUser,
+                GroupId = obj.GroupId,
+                DeadlineDate = obj.DeadlineDate,
+                Finished = DateTime.Now
+            };
+            _db.CompletedTasks.Add(completedTask);
             _db.Items.Remove(obj);
             _db.SaveChanges();
 
