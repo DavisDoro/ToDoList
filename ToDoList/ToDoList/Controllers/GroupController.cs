@@ -11,15 +11,18 @@ using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
+    [Authorize]
     public class GroupController : Controller
     {
+        
         private readonly ApplicationDbContext _context;
 
+        
         public GroupController(ApplicationDbContext context)
         {
             _context = context;
         }
-        [Authorize]
+
         public IActionResult Index()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -35,7 +38,6 @@ namespace ToDoList.Controllers
             return View(objList);
         }
 
-        [Authorize]
         public IActionResult GroupListView()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -63,11 +65,11 @@ namespace ToDoList.Controllers
             return View(viewModel);
         }
 
+        // [View Group] Get
         public IActionResult ViewGroup(Group obj)
         {
             List<Item> itemList = new List<Item>();
             List<Group> groupList = new List<Group>();
-
 
             foreach (var group in _context.Groups)
             {
@@ -97,7 +99,6 @@ namespace ToDoList.Controllers
         }
 
         // [CREATE] Get
-        [Authorize]
         public IActionResult Create()
         {
 
@@ -105,7 +106,6 @@ namespace ToDoList.Controllers
         }
 
         //[DELETE] Get
-        [Authorize]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -147,7 +147,6 @@ namespace ToDoList.Controllers
         }
 
         //[ADD MEMBER] Get
-        [Authorize]
         [HttpGet("AddMember/{id}")]
         public IActionResult AddMember(int id)
         {
@@ -157,7 +156,6 @@ namespace ToDoList.Controllers
         }
 
         //[ADD MEMBER] Post
-        [Authorize]
         [HttpPost("AddMember/{id}")]
         public async Task<IActionResult> AddMember(AddMember obj)
         {
@@ -182,17 +180,19 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
+        //[Join Group] Post
+        // User accepts group invite
         public IActionResult JoinGroup(MemberAccess model)
         {
-            int accessId = model.Id;
             MemberAccess access = _context.Accesses.Find(model.Id);
             access.Status = true;
             _context.Accesses.Update(access);
             _context.SaveChanges();
+
             return RedirectToAction("GroupListView");
         }
+
         // [DELETE] Post
-        [Authorize]
         public IActionResult DeleteGroup(int id)
         {
             List<MemberAccess> accessList = _context.Accesses.ToList();
@@ -204,7 +204,6 @@ namespace ToDoList.Controllers
                     _context.Accesses.Remove(access);
                 }
             }
-
             var obj = _context.Groups.Find(id);
             if (obj == null)
             {

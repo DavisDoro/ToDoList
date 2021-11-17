@@ -41,7 +41,9 @@ namespace ToDoList.Controllers
             ViewBag.Users = new SelectList(userlist);
             return View();
         }
-        [HttpGet]
+
+
+        [HttpGet] //[View Completed Tasks] Get
         public IActionResult ViewHistory(GroupAndItemModel model)
         {
             int groupId = model.Groups[0].Id;
@@ -58,7 +60,7 @@ namespace ToDoList.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost] // [Create Item in Group] Post
         public IActionResult CreateGroupItem(GroupAndItemModel group)
         {
             int groupId = group.Groups[0].Id;
@@ -78,6 +80,7 @@ namespace ToDoList.Controllers
             }
 
             Item viewItem = new Item();
+            viewItem.DeadlineDate = DateTime.Today.AddDays(2);
             viewItem.GroupId = groupId;
 
             ViewBag.Users = new SelectList(userList);
@@ -131,6 +134,7 @@ namespace ToDoList.Controllers
 
             return View(obj);
         }
+
         //POST Delete
         public IActionResult DeletePOST(int? id)
         {
