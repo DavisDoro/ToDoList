@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ToDoList.Data;
 using ToDoList.Models;
-using ToDoList.ViewModel;
+using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
@@ -36,21 +36,64 @@ namespace ToDoList.Controllers
             return View(objList);
         }
 
-        [HttpGet]
         public IActionResult UserView()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            List<Group> userGroup = new List<Group>();
+            string userEmail = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            foreach (var access in _context.Accesses) // TODO: Accesses to list first
+            List<Group> userGroup = new List<Group>();
+            List<MemberAccess> accessForThisUser = new List<MemberAccess>();
+            foreach (var access in _context.Accesses)
             {
-                if (access.Email == claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value)
+                if (access.Email == claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value.ToLower())
                 {
-                    int groupId = access.GroupId;
-                    userGroup.Add(_context.Groups.Find(groupId));
+
+                    userGroup.Add(_context.Groups.Find(access.GroupId));
+
+                    accessForThisUser.Add(access);
                 }
             }
-            return View(userGroup);
+            ViewGroupsModel viewModel = new ViewGroupsModel()
+            {
+                Groups = userGroup,
+                Accesses = accessForThisUser
+            };
+
+
+            return View(viewModel);
+        }
+
+        public IActionResult ViewGroup(Group obj)
+        {
+            List<Item> itemList = new List<Item>();
+            List<Group> groupList = new List<Group>();
+
+
+            foreach (var group in _context.Groups)
+            {
+                if (group.Id == obj.Id)
+                {
+                    groupList.Add(group);
+                }
+            }
+
+            foreach (var access in _context.Accesses)
+            {
+                if (item.GroupId == obj.Id)
+                {
+                    itemList.Add(item);
+                }
+            }
+            List<Group> groups = new List<Group>();
+            groups.Add(obj);
+
+            GroupAndItemModel viewItem = new GroupAndItemModel()
+            {
+                Groups = groupList,
+                Items = itemList
+            };
+
+            return View(viewItem);
         }
         [HttpPost]
         public IActionResult ViewGroupPost(Group group)
@@ -62,10 +105,7 @@ namespace ToDoList.Controllers
         //[HttpGet("UserView/{id}")]
         public IActionResult ViewGroup(Group group)
         {
-            var Id = group.Id;
-            //TODO Get item list for this group from GroupContent table
-
-            return View("ViewGroup", group);
+            return View();
         }
 
         //[DELETE] Get
@@ -135,11 +175,11 @@ namespace ToDoList.Controllers
             }
 
             MemberAccess access = new MemberAccess();
-            access.Email = obj.Email;
+            access.Email = obj.Email.ToLower();
             access.GroupId = obj.GroupId;
             //System.Console.WriteLine(obj.GroupId);
             access.Role = "User";
-            access.Status = true;
+            access.Status = false;
 
             _context.Accesses.Add(access);
             _context.SaveChanges();
@@ -148,6 +188,15 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult JoinGroup(MemberAccess model)
+        {
+            int accessId = model.Id;
+            MemberAccess access = _context.Accesses.Find(model.Id);
+            access.Status = true;
+            _context.Accesses.Update(access);
+            _context.SaveChanges();
+            return RedirectToAction("GroupListView");
+        }
         // [DELETE] Post
         public IActionResult DeleteGroup(int id)
         {

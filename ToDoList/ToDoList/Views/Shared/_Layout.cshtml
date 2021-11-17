@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+@{
+    var identity = ClaimTypes.Name;
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,31 +23,37 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                        <li class="nav-item">
+                        @*                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Index">To-Do-List</a>
-                        </li>
+                            </li>*@
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Log in</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Sign up</a>
+                            </li>
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Group" asp-action="Index">Group Management</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Group" asp-action="GroupListView">Your groups</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Group" asp-action="UserView">TASKer groups</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Group" asp-action="Index">Manager</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secured">My Account</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
-                            </li>
+
                         }
                     </ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="nav-link text-dark text-right" asp-area="" asp-controller="Home" asp-action="Logout"><p class="text-right navbar-nav flex-grow-1">Logout (<span class="text-success">@User.Identity.Name</span>) </p></a>
+                    }
+
                 </div>
             </div>
         </nav>

@@ -1,0 +1,95 @@
+﻿@model ToDoList.Models.Item
+@{
+    Html.HiddenFor(m => m.GroupId);
+        var returnUrl = Context.Request.Query["ReturnUrl"];
+}
+
+<form asp-route-returnurl = "@returnUrl" method="post" asp-action="Create">
+    <input asp-for="Id" hidden />
+    <div class="border p-3 w-100 p-3">
+        <div class="form-group row">
+            <h2 class="text-black-50 pl-3">Add Item</h2>
+
+        </div>
+
+        <div class="w-75">
+            <div class="form-group col">
+                <div class="col-3">
+                    <label asp-for="ItemName"></label>
+                </div>
+                <div class="w-75">
+                    <input asp-for="ItemName" class="form-control" />
+                    <span asp-validation-for="ItemName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="w-75">
+            <div class="form-group col">
+                <div class="w-75">
+                    <label asp-for="ItemDescription"></label>
+                </div>
+                <div class="w-75">
+                    <textarea asp-for="ItemDescription" class="form-control"> </textarea>
+                    <span asp-validation-for="ItemDescription" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="w-100">
+            <div class="form-group col">
+                <div class="w-100">
+                    <label asp-for="ResponsibleUser"></label>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    <div class="w-50">
+
+                        @Html.DropDownList("ResponsibleUser", ViewBag.Users as SelectList, new { style = "width: 250px;height: 37px;" })
+
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="w-75">
+            <div class="form-group col">
+                <div class="w-75">
+                <label asp-for="DeadlineDate"></label>
+                </div>
+                <div class="w-50">
+                <input asp-for="DeadlineDate" class="form-control" />
+                <span asp-validation-for="DeadlineDate" class="text-danger" value="@DateTime.Today + 1"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-7">
+            <div class="form-group row">
+                    <div class="col-2">
+                    <label asp-for="Priority "></label>
+                    </div>
+                    <div class="col-3">
+                      <ul>Lo No Hi</ul>
+                    </div>
+                    <div class="col-4">
+                        <input id="Priority" name="Priority" value="Low" type="radio">
+                        <input id="Priority" checked="checked" name="Priority" value="Normal" type="radio">
+                        <input id="Priority" name="Priority" value="High" type="radio">
+                       @Html.HiddenFor(m => m.GroupId)
+                    </div>
+               </div>
+        </div>
+
+          
+
+
+
+        <div class="col-8">
+            <div class="form-group row">             
+                    <input type="submit" class="btn btn-info w-25" value="create" />
+                    <a class="btn btn-danger w-25" asp-action="Index">Back</a>
+            </div>
+         </div>
+     </div>
+
+
+</form>

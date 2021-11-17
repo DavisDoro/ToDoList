@@ -1,9 +1,5 @@
-﻿@model ToDoList.Models.Group;
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    Html.HiddenFor(m => m.Id);
+﻿@{
+    string thisGroupId = Model.Groups[0].Name;
+    Html.HiddenFor(m => m.Groups[0].Id);
+    var returnUrl = Context.Request.Query["ReturnUrl"];
 }
-<h3>View Group</h3>
- <a class="btn btn-primary" asp-controller="Item" asp-action="Create">Create new Item</a>

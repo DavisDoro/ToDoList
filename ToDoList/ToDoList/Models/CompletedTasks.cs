@@ -4,15 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ToDoList.Models
 {
-    public enum Priority
+    public class CompletedTask : DateBase
     {
-        Low = 1,
-        Normal = 2,
-        High = 3
-    }
 
-    public class Item : DateBase
-    {
         [Key]
         public int Id { get; set; }
         [DisplayName("Task Name")]
@@ -25,6 +19,7 @@ namespace ToDoList.Models
         public DateTime DeadlineDate { get; set; }
         public Priority Priority { get; set; }
         public int? UserId { get; set; }
+        public DateTime Finished { get; set; }
 
     }
 }

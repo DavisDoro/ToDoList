@@ -1,0 +1,48 @@
+﻿@model ToDoList.ViewModels.CompletedTaskViewModel
+
+
+@if (@Model.Items.Count() == 0)
+{
+    <br />
+    <h5 class="text-black-50"> There are no completed tasks yet</h5>
+}
+else
+{
+    <h4 class="text-black-50"> Completed Tasks</h4>
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Task Name
+                </th>
+                <th>
+                    Task Description
+                </th>
+                <th>
+                    Responsible User
+                </th>
+                <th>
+                    DeadlineDate
+                </th>
+                <th>
+                    Completed on
+                </th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td width="10%">@item.ItemName</td>
+                    <td width="30%">@item.ItemDescription</td>
+                    <td width="15%">@item.ResponsibleUser</td>
+                    <td width="10%">@item.DeadlineDate</td>
+                    <td width="10%">@item.Finished</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
