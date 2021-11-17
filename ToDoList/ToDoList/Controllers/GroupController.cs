@@ -11,7 +11,6 @@ using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
-    [Authorize]
     public class GroupController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +19,7 @@ namespace ToDoList.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -36,7 +35,8 @@ namespace ToDoList.Controllers
             return View(objList);
         }
 
-        public IActionResult UserView()
+        [Authorize]
+        public IActionResult GroupListView()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             string userEmail = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -77,7 +77,7 @@ namespace ToDoList.Controllers
                 }
             }
 
-            foreach (var access in _context.Accesses)
+            foreach (var item in _context.Items)
             {
                 if (item.GroupId == obj.Id)
                 {
@@ -95,20 +95,17 @@ namespace ToDoList.Controllers
 
             return View(viewItem);
         }
-        [HttpPost]
-        public IActionResult ViewGroupPost(Group group)
-        {
-            return RedirectToAction("item/Create");
-        }
 
-        // [Group Content] Get
-        //[HttpGet("UserView/{id}")]
-        public IActionResult ViewGroup(Group group)
+        // [CREATE] Get
+        [Authorize]
+        public IActionResult Create()
         {
+
             return View();
         }
 
         //[DELETE] Get
+        [Authorize]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -118,19 +115,14 @@ namespace ToDoList.Controllers
             var group = _context.Groups.Find(id);
             if (group == null)
             {
-                return NotFound(); //not found exception
+                return NotFound();
             }
             return View(group);
         }
 
-        // [CREATE] Get
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // [CREATE] Post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreateGroup obj)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -155,6 +147,7 @@ namespace ToDoList.Controllers
         }
 
         //[ADD MEMBER] Get
+        [Authorize]
         [HttpGet("AddMember/{id}")]
         public IActionResult AddMember(int id)
         {
@@ -164,10 +157,11 @@ namespace ToDoList.Controllers
         }
 
         //[ADD MEMBER] Post
+        [Authorize]
         [HttpPost("AddMember/{id}")]
         public async Task<IActionResult> AddMember(AddMember obj)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower() == obj.Email.ToLower());
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower().Equals(obj.Email.ToLower()));
             if (user == null)
             {
                 TempData["Error"] = $"User with email {obj.Email} does not exist.";
@@ -177,7 +171,7 @@ namespace ToDoList.Controllers
             MemberAccess access = new MemberAccess();
             access.Email = obj.Email.ToLower();
             access.GroupId = obj.GroupId;
-            //System.Console.WriteLine(obj.GroupId);
+            System.Console.WriteLine(obj.GroupId);
             access.Role = "User";
             access.Status = false;
 
@@ -198,11 +192,13 @@ namespace ToDoList.Controllers
             return RedirectToAction("GroupListView");
         }
         // [DELETE] Post
+        [Authorize]
         public IActionResult DeleteGroup(int id)
         {
             List<MemberAccess> accessList = _context.Accesses.ToList();
             foreach (var access in accessList)
             {
+
                 if (access.GroupId == id)
                 {
                     _context.Accesses.Remove(access);
@@ -220,4 +216,3 @@ namespace ToDoList.Controllers
         }
     }
 }
-
